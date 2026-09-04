@@ -1,6 +1,10 @@
 # Material 05: Submission Packet (English Summary)
 
-> Companion to the Chinese materials (01–04). Fill `*[TBD]*` fields before submission; keep consistent with the actual deployment and the frozen commit/tag.
+> Companion to the Chinese materials (01–04). Mandol is the team's own
+> self-developed memory system; this entry is its competition adaptation
+> (Add/Search wrapper) developed in a dedicated fork. Fill `*[TBD]*` fields
+> before submission; keep consistent with the actual deployment and the frozen
+> commit/tag.
 
 ## 1. Identity & System
 
@@ -9,6 +13,7 @@
 | Challenge | Agent Memory Challenge / Agent Memory Leaderboard (AML), 2nd cycle |
 | System name | Mandol-AML |
 | Version | 0.1.0-aml.1 (freeze via git tag at submission) |
+| Project nature | Self-developed system Mandol + competition adaptation layer (core unchanged) |
 | Track | Textual Memory + Coding Agent Memory |
 | Division | Open-source methods (Academic methods) |
 | Route | Self-hosted Add/Search API (public repo + frozen version) |
@@ -19,14 +24,15 @@
 
 | Field | Value |
 | --- | --- |
-| Public repository | https://github.com/bubaa9531-dh/Mandol |
-| Upstream project | https://github.com/AgentCombo/Mandol (Apache-2.0) |
-| Original paper | Mandol: An Agglomerative Agent Memory System for Long-Term Conversations — https://arxiv.org/abs/2606.29778 |
+| Competition repo (public) | https://github.com/bubaa9531-dh/Mandol |
+| Main development repo | https://github.com/AgentCombo/Mandol (self-developed Mandol, Apache-2.0) |
+| Repo relation | The competition repo is a fork of the main development repo for independent competition development; core code unchanged |
+| Paper | Mandol: An Agglomerative Agent Memory System for Long-Term Conversations — https://arxiv.org/abs/2606.29778 |
 | Paper authors | Yuhan Zhang, Zhiyuan Guo, Ziheng Zeng, Wei Wang, Wentao Wu, Lijie Xu (per arXiv page) |
-| Upstream sync point | `6d7af4f…` |
+| Sync baseline with main repo | `6d7af4f…` |
 | Adapter code commit | `b4dc454149a29b34e669e73291d2e944e557f080` |
 | Frozen tag at submission | `v0.1.0-aml.1` (tag the latest main before the formal run) |
-| Changes vs upstream | Only additive files (`src/mandol_aml/`, Dockerfile, compose, env template, docs, tests, scripts); Mandol core unchanged. See aml/CHANGES.md and aml/ATTRIBUTION.md. |
+| Changes vs main repo | Only additive files (`src/mandol_aml/`, Dockerfile, compose, env template, docs, tests, scripts); Mandol core unchanged. See aml/CHANGES.md and aml/ATTRIBUTION.md. |
 
 ## 3. Endpoints (self-hosted)
 
@@ -53,7 +59,7 @@ Contract details follow the official API guide: https://agentmemoryleaderboard.a
 - Search returns memory evidence only; it never produces final answers.
 - Evaluation data is used only for the current job; not for training/fine-tuning/redistribution; deleted within 30 days (`AML_DATA_TTL_DAYS=30`).
 - No hard-coded answers, no benchmark leakage, no prompt injection, no live human answering, no undisclosed code reuse.
-- No secrets in the public repository (Memory System Key and provider keys are set only in the deployment environment).
+- No secrets in the public repository (Memory System Key and provider keys are set only in the deployment environment; to be provided by the project PI).
 
 ## 6. Key Dates (2nd cycle, UTC+8)
 
@@ -65,6 +71,6 @@ Contract details follow the official API guide: https://agentmemoryleaderboard.a
 ## 7. Local Materials Index
 
 - Chinese form/method/API/compliance materials: aml/docs/01–04
-- Change disclosure: aml/CHANGES.md; attribution: aml/ATTRIBUTION.md
+- Ownership & citation: aml/ATTRIBUTION.md; change disclosure: aml/CHANGES.md
 - Service README: aml/README.md; overlay README: README_AML_OVERLAY.md
 - Smoke client: aml/scripts/smoke_test.py; contract tests: tests/test_contract.py

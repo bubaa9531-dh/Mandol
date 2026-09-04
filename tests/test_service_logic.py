@@ -122,8 +122,17 @@ def _install_mandol_stub() -> None:
 
 @pytest.fixture(autouse=True)
 def _stub_mandol():
+    previous = sys.modules.get("mandol")
     _install_mandol_stub()
-    yield
+    try:
+        yield
+    finally:
+        # Restore any pre-existing module so we never leak the stub into a
+        # session where the real mandol package is installed.
+        if previous is None:
+            sys.modules.pop("mandol", None)
+        else:
+            sys.modules["mandol"] = previous
 
 
 def _make_service(backend: str = "shared") -> MemoryService:

@@ -48,10 +48,12 @@ Dockerfile  docker-compose.yml  .dockerignore  aml.env.example  README_AML_OVERL
 src/mandol_aml/        （适配包，全部新增）
 tests/conftest.py  tests/test_contract.py
 aml/README.md  aml/CHANGES.md  aml/ATTRIBUTION.md
-aml/scripts/smoke_test.py
+aml/scripts/smoke_test.py  aml/scripts/deploy_local.sh  aml/scripts/deploy_local.ps1
+aml/scripts/run_local_e2e.py
 aml/docs/01_报名与提交信息表.md  aml/docs/02_方法说明.md
 aml/docs/03_接口与运行说明.md    aml/docs/04_合规与诚信声明.md
 aml/docs/05_Submission_Packet_EN.md
+aml/docs/06_本地部署与连通性测试手册.md
 ```
 
 对主开发仓库既有文件（`src/mandol/`、`pyproject.toml`、`uv.lock`、README 等）**零修改**。
@@ -74,6 +76,7 @@ docker compose up -d --build
 - 适配层主文档：`aml/README.md`
 - 改动披露（合规必需）：`aml/CHANGES.md`
 - 方法与版权归属：`aml/ATTRIBUTION.md`
-- 参赛材料：`aml/docs/01~05`
+- 参赛材料：`aml/docs/01~06`
 - 接口与运行说明：`aml/docs/03_接口与运行说明.md`
+- 本地部署与连通性测试：`aml/docs/06_本地部署与连通性测试手册.md`（一键脚本：`aml/scripts/deploy_local.sh` / `.ps1`）
 - 报名入口：<https://agentmemoryleaderboard.ai/evaluation>

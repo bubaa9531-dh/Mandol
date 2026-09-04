@@ -11,7 +11,7 @@
 | 项目性质 | 课题组自研项目（负责人：*[待填写]*；机构/团队：*[待填写]*） |
 | 论文 | https://arxiv.org/abs/2606.29778 |
 | 论文作者 | Yuhan Zhang, Zhiyuan Guo, Ziheng Zeng, Wei Wang, Wentao Wu, Lijie Xu（以论文页为准） |
-| 主开发仓库 | https://github.com/AgentCombo/Mandol（Apache-2.0；PyPI mandol 0.1.0；Python >=3.12,<3.13） |
+| 主开发仓库 | https://github.com/AgentCombo/Mandol （Apache-2.0；PyPI mandol 0.1.0；Python >=3.12,<3.13） |
 | 许可证 | Apache-2.0 |
 
 ## 2. 参赛版本与仓库关系

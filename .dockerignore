@@ -1,0 +1,28 @@
+# Build / repo hygiene
+.git
+.gitignore
+.venv
+venv
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+.mypy_cache
+
+# Local test / run artifacts must not enter the image
+benchmark_locomo/dataset
+benchmark_longmemeval/dataset
+benchmark_self_host/locomo10/dataset
+**/test_runs
+**/output
+**/*.db
+**/*.snapshot
+data
+
+# Docs / dev extras
+*.md
+!README_PYPI.md
+docs
+website
+picture
+README.assets

@@ -51,6 +51,7 @@ aml/README.md  aml/CHANGES.md  aml/ATTRIBUTION.md
 aml/scripts/smoke_test.py
 aml/docs/01_报名与提交信息表.md  aml/docs/02_方法说明.md
 aml/docs/03_接口与运行说明.md    aml/docs/04_合规与诚信声明.md
+aml/docs/05_Submission_Packet_EN.md
 ```
 
 对上游既有文件（`src/mandol/`、`pyproject.toml`、`uv.lock`、README 等）**零修改**。
@@ -73,6 +74,6 @@ docker compose up -d --build
 - 适配层主文档：`aml/README.md`
 - 改动披露（合规必需）：`aml/CHANGES.md`
 - 方法与版权归属：`aml/ATTRIBUTION.md`
-- 参赛材料：`aml/docs/01~04`
+- 参赛材料：`aml/docs/01~05`
 - 接口与运行说明：`aml/docs/03_接口与运行说明.md`
 - 报名入口：<https://agentmemoryleaderboard.ai/evaluation>

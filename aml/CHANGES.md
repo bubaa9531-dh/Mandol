@@ -9,7 +9,7 @@
 - 项目：Mandol: An Agglomerative Agent Memory System for Long-Term Conversations（课题组自研）
 - 论文：https://arxiv.org/abs/2606.29778
 - 论文作者：Yuhan Zhang, Zhiyuan Guo, Ziheng Zeng, Wei Wang, Wentao Wu, Lijie Xu（以论文页为准）
-- 主开发仓库：https://github.com/AgentCombo/Mandol（Apache-2.0；PyPI mandol 0.1.0；Python >=3.12,<3.13）
+- 主开发仓库：https://github.com/AgentCombo/Mandol （Apache-2.0；PyPI mandol 0.1.0；Python >=3.12,<3.13）
 - 赛事开发仓库：https://github.com/bubaa9531-dh/Mandol
 - 与主仓库同步基线：`6d7af4f…`（fork 时与主仓库 `main` 一致）
 - 适配层代码完成提交：`b4dc454149a29b34e669e73291d2e944e557f080`

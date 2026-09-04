@@ -1,0 +1,28 @@
+# docker compose up -d --build
+# All settings are read from environment variables; copy aml.env.example to
+# .env and adjust before a formal evaluation run.
+services:
+  mandol-aml:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mandol-aml:0.1.0-aml.1
+    container_name: mandol-aml
+    restart: unless-stopped
+    env_file:
+      - aml.env.example
+    environment:
+      AML_HOST: "0.0.0.0"
+      AML_PORT: "8000"
+    ports:
+      - "8000:8000"
+    # Optional persistent volume for RocksDB tiered paging / snapshots.
+    # volumes:
+    #   - ./data/l2:/data/l2
+    #   - ./data/snapshots:/data/snapshots
+    # Uncomment if the embedding model / HF cache should persist across restarts:
+    #   - ./data/hf:/root/.cache/huggingface
+    deploy:
+      resources:
+        limits:
+          memory: 16g

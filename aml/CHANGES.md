@@ -1,56 +1,61 @@
 # 改动披露（Change Disclosure）
 
-> 赛事合规要求：复用他人论文/仓库/代码时，必须注明原作者、技术报告与许可证，
-> 并写清本次做了哪些改动。本文档即为此而设。
+> 赛事合规要求：复用他人论文/仓库/代码时，必须注明原作者、技术报告与许可证，并写清本次改动。
+> 本文档与 `aml/ATTRIBUTION.md` 配套，供赛事方资格与合规复核。
 
-## 上游来源
+## 1. 上游来源
 
-- 仓库：<https://github.com/AgentCombo/Mandol>
-- 论文：Mandol: An Agglomerative Agent Memory System for Long-Term Conversations
-  （<https://arxiv.org/abs/2606.29778>）
-- 作者 / 维护团队：Mandol Team（AgentCombo）
+- 仓库：https://github.com/AgentCombo/Mandol
+- 论文：Mandol: An Agglomerative Agent Memory System for Long-Term Conversations（https://arxiv.org/abs/2606.29778）
+- 论文作者：Yuhan Zhang, Zhiyuan Guo, Ziheng Zeng, Wei Wang, Wentao Wu, Lijie Xu（以论文页为准）
+- 维护组织：Mandol Team（AgentCombo）
 - 许可证：Apache-2.0（见上游 LICENSE）
-- 本 fork：bubaa9531-dh/Mandol（<https://github.com/bubaa9531-dh/Mandol>），基于上游 `main`（固定参评提交 / fork main HEAD：**`b4dc454149a29b34e669e73291d2e944e557f080`**），
-  对应 Mandol PyPI 版本 0.1.0，Python 3.12）
+- 上游版本：PyPI `mandol` 0.1.0；要求 Python >=3.12,<3.13
 
-## 本次改动清单（相对上游 main）
+## 2. 本参赛仓库与版本
 
-**原则：不改动上游任何既有文件，全部为新增文件；Mandol 核心（`src/mandol/`）、
-`pyproject.toml`、`uv.lock` 均保持不变。**
+- Fork 仓库：https://github.com/bubaa9531-dh/Mandol（公开，Apache-2.0）
+- 与上游同步点：`6d7af4f…`（fork 创建时与上游 `main` 一致）
+- 适配层代码完成提交：`b4dc454149a29b34e669e73291d2e944e557f080`
+- 正式参评版本：`v0.1.0-aml.1`（提交 Full 前打 tag 并锁定，以报名时为准）
 
-| 新增文件 | 作用 | 是否影响 Mandol 核心 |
+## 3. 本次改动清单（相对上游 main，全部为新增文件）
+
+**原则：不改动上游任何既有文件。`src/mandol/`、`pyproject.toml`、`uv.lock`、README 等保持不变。**
+
+| 新增文件/目录 | 作用 | 是否影响 Mandol 核心 |
 | --- | --- | --- |
-| `src/mandol_aml/*` | AML Add/Search/Health HTTP 适配层（FastAPI） | 否，仅调用 Mandol 公共 API |
-| `Dockerfile`、`docker-compose.yml`、`.dockerignore` | 服务容器化 | 否 |
-| `aml.env.example` | 适配层环境变量模板 | 否 |
+| `src/mandol_aml/` | AML Add/Search/Health HTTP 适配层（FastAPI），含契约校验、鉴权、限流、留存 | 否，仅调用 Mandol 公共 API |
+| `Dockerfile`、`docker-compose.yml`、`.dockerignore` | 容器化部署 | 否 |
+| `aml.env.example` | 适配层环境变量模板（不含任何真实密钥） | 否 |
+| `README_AML_OVERLAY.md` | 叠加说明（仓库使用入口） | 否 |
 | `aml/README.md`、`aml/CHANGES.md`、`aml/ATTRIBUTION.md`、`aml/docs/*` | 文档与参赛材料 | 否 |
 | `aml/scripts/smoke_test.py` | 按 AML 契约的本地冒烟客户端 | 否 |
-| `tests/test_contract.py`、`tests/conftest.py` | 契约字段单元测试 | 否（上游 tests/ 无同名文件） |
+| `tests/conftest.py`、`tests/test_contract.py` | 契约单元测试（上游 tests/ 无同名文件） | 否 |
 
-### 行为说明
+## 4. 行为说明（封装层如何工作）
 
-1. `Add`：将赛事下发的消息块转换为 Mandol `MemoryUnit`（`text_content` 保存正文，
-   `role/timestamp/user_id/session_id/request_id` 存入元数据），经
-   `SemanticGraph.batch_add_units()` 写入；**同步**返回 200（数据立即可检索）。
-2. 隔离：`user_id` 是唯一检索边界。默认 `shared` 后端为每个 `user_id` 在共享
-   `SemanticGraph` 内建独立 `MemorySpace`，检索限定在该空间内，杜绝跨用户泄漏；
-   `isolated` 后端为每个 `user_id` 单独建图（模型权重仍经 Mandol 模型管理器共享）。
-3. `Search`：默认使用 `SemanticGraph.search_similarity_in_graph()`（稠密检索，
-   按空间/用户限定）；可选 `isolated` 后端 + `MultiRetriever.smart_search()`
-   混合检索。返回按相关度降序的 `{id, content, score?, created_at?}`。
-4. 高层记忆（可选，默认关闭）：`AML_HIGH_LEVEL_MEMORY=1` 时在后台调用
-   `mandol.auto_builder.build_high_level_memory()`，构建分层摘要/情景/实体关系
-   记忆（与上游 `benchmark_self_host` 同源），需要 LLM provider Key。
-5. 合规机制：默认 30 天数据自动清理；日志不记录消息正文；未启用任何硬编码答案、
-   数据集泄漏或评测数据复用。
+1. **Add**：将平台下发的消息块转换为 Mandol `MemoryUnit`（正文存 `text_content`；
+   `role/timestamp/user_id/session_id/request_id` 存 metadata），经
+   `SemanticGraph.batch_add_units()` 写入；写入完成且立即可检索后才返回 HTTP 200。
+2. **隔离**：`user_id` 是唯一检索隔离边界。默认 `shared` 后端为每个 `user_id`
+   在共享语义图内建独立 MemorySpace，检索限定在该空间；`isolated` 后端为每个
+   `user_id` 单独建图（模型权重经 Mandol 模型管理器共享），可支持混合检索且不跨用户泄漏。
+3. **Search**：默认 `SemanticGraph.search_similarity_in_graph()` 稠密检索（按用户空间限定）；
+   可选 `isolated` + `MultiRetriever.smart_search()` 混合检索。仅返回记忆证据，不生成答案。
+4. **可选实验特性（默认关闭）**：`AML_HIGH_LEVEL_MEMORY=1` 时在后台调用
+   `mandol.auto_builder.build_high_level_memory()` 做记忆组织（与上游
+   `benchmark_self_host` 同源）；需 LLM provider Key；只整理记忆、不参与答题。
+5. **合规机制**：默认 30 天数据自动清理；日志不含消息正文；未启用任何硬编码答案、
+   数据集泄漏或评测数据复用；Memory System Key 等凭证不入仓库。
 
-### 与上游“主体”的关系
+## 5. 与上游“主体”的关系
 
-本适配不构成对 Mandol 方法的修改或再训练，仅在赛事要求的
-「Add/Search 接口」与 Mandol 本体之间做工程封装（接口适配、部署、隔离、鉴权、
-限流、留存）。任何检索/记忆算法能力均来自 Mandol 本身。
+本参赛系统 = 上游 Mandol（算法主体，未改动）+ 本适配层（接口封装、部署、隔离、
+鉴权、限流、留存）。检索与记忆能力均来自 Mandol 本身；适配层不构成对 Mandol
+方法的修改、再训练或评测集适配。
 
-## 备注
+## 6. 后续维护义务
 
-- 若后续对 `src/mandol/` 或 `pyproject.toml` 做了修改（例如调参、增量高层记忆、
-  新增后端），必须在本文件与报名材料中**追加披露**，并更新固定 commit/版本号。
+若后续修改 `src/mandol/`、`pyproject.toml` 或检索策略，须在此文件与报名材料中
+**追加披露**，并更新锁定版本/tag。

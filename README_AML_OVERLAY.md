@@ -53,6 +53,7 @@ aml/scripts/run_local_e2e.py
 aml/docs/01_报名与提交信息表.md  aml/docs/02_方法说明.md
 aml/docs/03_接口与运行说明.md    aml/docs/04_合规与诚信声明.md
 aml/docs/05_Submission_Packet_EN.md
+aml/docs/06_工程验收与上线核对清单.md
 aml/docs/06_本地部署与连通性测试手册.md
 ```
 

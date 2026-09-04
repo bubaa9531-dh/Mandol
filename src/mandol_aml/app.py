@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import threading
 from contextlib import asynccontextmanager
 from typing import Any, Dict, Optional
 
@@ -40,24 +41,38 @@ def create_app(settings: Optional[Settings] = None) -> FastAPI:
     memory = MemoryService(cfg)
     limiter = RateLimiter(cfg.rate_limit_rpm)
     janitor = RetentionJanitor(memory, cfg)
-    ready_event_holder: Dict[str, Any] = {"ready": False}
+    ready_event_holder: Dict[str, Any] = {"ready": False, "started": False}
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         logger.info("starting Mandol-AML %s (backend=%s)", __version__, cfg.backend)
-        try:
-            memory.start()
-            ready_event_holder["ready"] = True
-        except Exception:
-            logger.exception("Mandol runtime failed to start; health will report not-ready")
-            ready_event_holder["ready"] = False
+
+        # Mandol warm-up (embedding model download/load) can take minutes on the
+        # first start. Run it in a background thread so the HTTP server starts
+        # immediately and /health reports 503 until the memory system is ready -
+        # this matches the AML health semantics and the Docker HEALTHCHECK.
+        def _initialize() -> None:
+            try:
+                memory.start()
+                ready_event_holder["ready"] = True
+                logger.info("Mandol runtime is ready")
+            except Exception:
+                logger.exception("Mandol runtime failed to start; health will report not-ready")
+                ready_event_holder["ready"] = False
+            finally:
+                ready_event_holder["started"] = True
+
+        threading.Thread(target=_initialize, name="aml-init", daemon=True).start()
         janitor.start()
         yield
         janitor.stop()
-        try:
-            memory.shutdown()
-        except Exception:
-            logger.exception("error during shutdown")
+        # Only purge user memory if initialization finished; otherwise the daemon
+        # init thread is still warming up and there is nothing to clean yet.
+        if ready_event_holder["started"] and memory.ready:
+            try:
+                memory.shutdown()
+            except Exception:
+                logger.exception("error during shutdown")
 
     app = FastAPI(
         title="Mandol-AML",
@@ -87,10 +102,12 @@ def create_app(settings: Optional[Settings] = None) -> FastAPI:
     @app.get(cfg.health_path, include_in_schema=False)
     def health() -> Dict[str, Any]:
         if not ready_event_holder["ready"] or not memory.ready:
-            raise HTTPException(
-                status_code=503,
-                detail={"reason": memory.init_error or "not ready"},
+            reason = memory.init_error or (
+                "memory system is initializing"
+                if not ready_event_holder["started"]
+                else "memory system is unavailable"
             )
+            raise HTTPException(status_code=503, detail={"reason": reason})
         stats = memory.stats()
         return {
             "status": "ok",

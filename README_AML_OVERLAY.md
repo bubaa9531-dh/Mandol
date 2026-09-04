@@ -1,10 +1,10 @@
 # Mandol-AML Overlay（叠加包说明）
 
 本目录是一份**纯增量叠加包**：把它下面的全部内容复制到
-`AgentCombo/Mandol` 的 fork 仓库根目录后，即可得到参赛仓库
+赛事开发仓库（fork 自主开发仓库 `AgentCombo/Mandol`）的根目录后，即可得到参赛仓库
 **Mandol-AML**（新增 AML Add/Search 适配层，不改动 Mandol 任何既有文件）。
 
-> 本包**不含** Mandol 源码；Mandol 源码来自你 fork 的上游仓库本身。
+> 本包**不含** Mandol 源码；Mandol 源码来自主开发仓库 `AgentCombo/Mandol`（fork 后为赛事开发仓库）。
 
 ## 如何生成参赛仓库（推荐流程）
 
@@ -41,7 +41,7 @@
 
 5. 记录本次固定 commit（报名与 `aml/CHANGES.md` 需要）。
 
-## 复制后新增了哪些文件（相对上游）
+## 复制后新增了哪些文件（相对主开发仓库基线）
 
 ```
 Dockerfile  docker-compose.yml  .dockerignore  aml.env.example  README_AML_OVERLAY.md
@@ -54,7 +54,7 @@ aml/docs/03_接口与运行说明.md    aml/docs/04_合规与诚信声明.md
 aml/docs/05_Submission_Packet_EN.md
 ```
 
-对上游既有文件（`src/mandol/`、`pyproject.toml`、`uv.lock`、README 等）**零修改**。
+对主开发仓库既有文件（`src/mandol/`、`pyproject.toml`、`uv.lock`、README 等）**零修改**。
 若你已有自己的 fork 分支，注意不要与本包在 `tests/conftest.py` 上冲突。
 
 ## 验证

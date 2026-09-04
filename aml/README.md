@@ -1,10 +1,11 @@
 # Mandol-AML：Agent Memory Challenge（AML）接入适配层
 
-Mandol-AML 是课题组基于 [Mandol](https://github.com/AgentCombo/Mandol)
-（论文 [arXiv:2606.29778](https://arxiv.org/abs/2606.29778)）参加
-**Agent Memory Challenge（AML，智能体记忆公开挑战赛）** 的接入封装：
+Mandol-AML 是课题组**自研**记忆系统 Mandol
+（论文 [arXiv:2606.29778](https://arxiv.org/abs/2606.29778)；主开发仓库 [AgentCombo/Mandol](https://github.com/AgentCombo/Mandol)）
+按 **Agent Memory Challenge（AML，智能体记忆公开挑战赛）** 赛事要求建立的
+**赛事适配分支**（fork 自主开发仓库，用于独立开发与版本管理）。赛事分支仅做接口与部署适配：
 
-- **不改动 Mandol 主体**：本目录对上游仓库是**纯增量**（只新增文件，不修改
+- **不改动 Mandol 主体**：本目录对主开发仓库是**纯增量**（只新增文件，不修改
   `src/mandol/` 任何代码、不修改 `pyproject.toml` 与 `uv.lock`）。
 - **只暴露赛事要求的两个接口**：`Add`（记忆写入）与 `Search`（记忆检索），
   另提供未鉴权的 `Health`。回答、评分、编排全部由 AML 平台完成。
@@ -36,7 +37,7 @@ Mandol-AML 是课题组基于 [Mandol](https://github.com/AgentCombo/Mandol)
 ├── aml.env.example        # 新增：服务配置模板
 ├── aml/                   # 新增：说明与参赛材料
 │   ├── README.md          # 本文档
-│   ├── CHANGES.md         # 相对上游的改动披露（赛事合规必需）
+│   ├── CHANGES.md         # 相对主开发仓库基线的改动披露（赛事合规必需）
 │   ├── ATTRIBUTION.md     # 原始方法/作者/论文/许可证声明
 │   ├── scripts/smoke_test.py
 │   └── docs/              # 报名与提交材料（填写后提交）
@@ -135,6 +136,6 @@ docker compose up -d --build
 - 默认路径为「共享语义图 + 按用户空间隔离 + 稠密检索」，稳定且省内存；
   该路径不启用 Mandol 的 LLM 高层记忆。
 - 追求更高分数的可选项（需在自有环境先冒烟验证）：
-  `isolated` 后端 + `hybrid`（BM25/SPLADE 需安装上游 `spacy-model` 依赖组），
+  `isolated` 后端 + `hybrid`（BM25/SPLADE 需安装项目 `spacy-model` 依赖组），
   以及实验性 `AML_HIGH_LEVEL_MEMORY=1` 高层记忆。
 - 评测数据只用于当次任务，30 天内删除；禁止用于训练、微调或对外传播。

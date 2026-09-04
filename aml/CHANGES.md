@@ -10,7 +10,7 @@
   （<https://arxiv.org/abs/2606.29778>）
 - 作者 / 维护团队：Mandol Team（AgentCombo）
 - 许可证：Apache-2.0（见上游 LICENSE）
-- 本 fork 基于的上游提交：`main` 分支（固定 commit：**[待填写，创建 fork 后记录]**，
+- 本 fork：bubaa9531-dh/Mandol（<https://github.com/bubaa9531-dh/Mandol>），基于上游 `main`（固定参评提交 / fork main HEAD：**`b4dc454149a29b34e669e73291d2e944e557f080`**），
   对应 Mandol PyPI 版本 0.1.0，Python 3.12）
 
 ## 本次改动清单（相对上游 main）

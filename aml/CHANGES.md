@@ -2,20 +2,20 @@
 
 > 说明：Mandol 为课题组自研项目；本参赛系统是在主开发仓库基础上为 AML 赛事建立的
 > **赛事开发分支**（bubaa9531-dh/Mandol），仅做赛事适配包装，**不修改 Mandol 主体**。
-> 本文档披露“赛事分支相对主仓库基线”的全部改动，供赛事方资格与合规复核。
+> 本文档披露“赛事分支相对主仓库基线”并随公开仓库发布的全部改动，供赛事方复核。
 
 ## 1. 项目与基线
 
 - 项目：Mandol: An Agglomerative Agent Memory System for Long-Term Conversations（课题组自研）
 - 论文：https://arxiv.org/abs/2606.29778
 - 论文作者：Yuhan Zhang, Zhiyuan Guo, Ziheng Zeng, Wei Wang, Wentao Wu, Lijie Xu（以论文页为准）
-- 主开发仓库：https://github.com/AgentCombo/Mandol （Apache-2.0；PyPI mandol 0.1.0；Python >=3.12,<3.13）
+- 主开发仓库：https://github.com/AgentCombo/Mandol（Apache-2.0；PyPI mandol 0.1.0；Python >=3.12,<3.13）
 - 赛事开发仓库：https://github.com/bubaa9531-dh/Mandol
 - 与主仓库同步基线：`6d7af4f…`（fork 时与主仓库 `main` 一致）
 - 适配层代码完成提交：`b4dc454149a29b34e669e73291d2e944e557f080`
 - 正式参评版本：`v0.1.0-aml.1`（提交 Full 前打 tag 并锁定，以报名时为准）
 
-## 2. 改动范围（相对基线，全部为新增文件）
+## 2. 公开仓库新增文件（相对主仓库基线，全部为新增）
 
 **原则：不修改主仓库任何既有文件。`src/mandol/`、`pyproject.toml`、`uv.lock`、
 README 等主体内容保持不变。**
@@ -26,9 +26,12 @@ README 等主体内容保持不变。**
 | `Dockerfile`、`docker-compose.yml`、`.dockerignore` | 容器化部署 | 否 |
 | `aml.env.example` | 适配层环境变量模板（不含任何真实密钥） | 否 |
 | `README_AML_OVERLAY.md` | 赛事分支使用与叠加说明 | 否 |
-| `aml/README.md`、`aml/CHANGES.md`、`aml/ATTRIBUTION.md`、`aml/docs/*` | 文档与参赛材料 | 否 |
+| `aml/README.md`、`aml/CHANGES.md`、`aml/ATTRIBUTION.md` | 说明文档与合规披露 | 否 |
+| `aml/docs/02_方法说明.md`、`aml/docs/03_接口与运行说明.md` | 代码实现与方法说明、接口与运行说明（赛事复核材料） | 否 |
 | `aml/scripts/smoke_test.py` | 按 AML 契约的本地冒烟客户端 | 否 |
-| `tests/conftest.py`、`tests/test_contract.py` | 契约单元测试（主仓库 tests/ 无同名文件） | 否 |
+| `tests/conftest.py`、`tests/test_contract.py`、`tests/test_service_logic.py` | 契约单测与服务链路测试 | 否 |
+
+> 报名信息、合规签字声明等受控材料及内部文档不随公开仓库发布，团队在私有位置保留。
 
 ## 3. 适配层行为说明
 
